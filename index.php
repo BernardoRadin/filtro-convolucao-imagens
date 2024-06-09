@@ -36,11 +36,6 @@
                     <input type="submit" class="submit-file">
                 </div>
             </form> 
-            <!-- <div class='nomes'>
-                <label class='nome'>Bernardo Radin</label></br>
-                <label class='nome'>Mateus Alves</label></br>
-                <label class='nome'>Gabriel Birck</label>
-            </div> -->
         </div>
         <div class='meio'>
             <img class="imagem"/>
@@ -48,6 +43,13 @@
     </div>
     <script>
         $(document).ready(function() {
+
+            $('.input-matriz').blur(function(e){
+                var valorDigitado = $(e.target).val();
+                if(isNaN(valorDigitado)){
+                    $(e.target).val('');
+                }
+            })
 
             $('#load-filtros-prontos').click(()=>{
                 $('.overlay').css('display','flex');
@@ -84,7 +86,7 @@
             });
         });
 
-        const file = document.querySelector('.input-file');
+        var file = document.querySelector('.input-file');
         file.addEventListener('change', (e) => {
             if(e.target.files.length > 0){
                 const [file] = e.target.files;
@@ -101,9 +103,9 @@
             $('#rangeValue').text(val);
         }
 
-        function CriaInputs(value) {
+        function CriaInputs(value, filtro = null) {
             var container = $('.matriz-filtro');
-            container.empty(); // Clear existing inputs
+            container.empty();
 
             var width = 60;
             var height = 60;
@@ -130,8 +132,19 @@
             $('.input-matriz').css({
                 width: width + 'px',
                 height: height + 'px'
-                // margin: margin + 'px'
             });
+
+            if(filtro){
+                $('.input-matriz').each(function (index) {
+                    $(this).val(filtro[index]);
+                });
+            }
+        }
+
+        function updateMatrizInputs(filtro) {
+            var tamanho = Math.sqrt(filtro.length);
+            $('#rangeInput').val(tamanho).trigger('input');
+            CriaInputs(tamanho, filtro);
         }
 
         CriaInputs(3);
